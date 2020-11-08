@@ -9,63 +9,25 @@ TODO:
 	trim video -ss -to
 	-[a,v,s]n to remove streams
 	subtitle size/color
+	-map
+	
+	-vf subtitles=legenda.srt:force_style='FontSize=25' utf8
+	-af "volume=25dB, highpass=f=200, equalizer=f=50:width_type=h:width=100:g=-15"
+	-profile:v main
+	
+	annotations
+	requirements.txt
+	sincronizar audio / legenda
+	video filter
+	sync audio
+	logica combobox (só muda se transcodar video ou audio)
 
 """
 
-import sys
 from PyQt5 import QtWidgets, QtGui, QtCore, uic
-from PyQt5.QtWidgets import QFileDialog, QMainWindow, QApplication, QInputDialog
-from PyQt5.QtCore import pyqtSlot, Qt, QDir, QProcess
-
-class CmdBuilder():
-	
-	def __init__(self):
-		self.vcodec = "copy"; self.acodec = "copy"
-		self.vbitrate = "copy"; self.abitrate = "copy"
-		self.preset = "medium"; self.resolution = "copy"
-		self.downmix = False
-		self.volume = 100
-		self.sub_size = 25; self.sub_color = "white"
-		
-	def get_ffmpeg(self): return "ffmpeg"
-	def get_info(self, input):
-		return ["-hide_banner", "-i", input]
-	def get_args(self, input, output, srt, additional):
-		full_cmd = self.get_info(input) + self.preset_and_resolution() + self.codec_and_bitrate() + [output]
-		print(' '.join(full_cmd))
-		return full_cmd
-		
-	def codec_and_bitrate(self):
-		return self.get_vcodec() + self.get_vbitrate() + self.get_acodec() + self.get_abitrate()
-	def get_vcodec(self): return ['-c:v', self.vcodec]
-	def get_acodec(self): return ['-c:a', self.acodec]
-	def get_vbitrate(self):
-		if self.vbitrate == "copy": return []
-		else: return ['-b:v', self.vbitrate, '-maxrate', self.vbitrate, '-bufsize', '500k']
-	def get_abitrate(self):
-		if self.abitrate == "copy": return []
-		else: return ['-b:a', self.abitrate]
-		
-		
-	def preset_and_resolution(self): return self.get_preset() + self.get_resolution()
-	def get_preset(self): return ['-preset', self.preset]
-	def get_resolution(self):
-		if self.resolution == "copy": return []
-		else: return ['-s', self.resolution]
-		
-		
-	def volume_and_downmix(self):
-		return []
-	def get_downmix(self):
-		if self.downmix is True: return ['-ac', '2']
-		else: return []
-	def get_volume(self):
-		return []
-		
-		
-	def get_subtitle(self):
-		return ['-vf subtitles={}:force_style="FontSize={}"'.format(self.sub_path, self.sub_size)]
-
+from PyQt5.QtWidgets import QFileDialog, QMainWindow, QInputDialog, QMessageBox
+from PyQt5.QtCore import Qt, QDir, QProcess
+from commandBuilder import *
 
 class Convert2(QMainWindow):
 
@@ -80,61 +42,72 @@ class Convert2(QMainWindow):
 		self.connects()
 		
 	def connects(self):
-		self.convertButton.clicked.connect(self.convert)
-		self.process.readyRead.connect(self.print_output)
-		self.selectInputButton.clicked.connect(self.select_input_file)
-		self.sSelectButton.clicked.connect(self.select_srt_file)
-		self.infoButton.clicked.connect(self.show_info)
-		self.clearOutputButton.clicked.connect(lambda: self.output.clear())
-		self.vCodecCombo.currentIndexChanged.connect(self.set_vcodec)
-		self.aCodecCombo.currentIndexChanged.connect(self.set_acodec)
-		self.aBitrateCombo.currentIndexChanged.connect(self.set_abitrate)
-		self.vBitrateCombo.currentIndexChanged.connect(self.set_vbitrate)
-		self.vPresetCombo.currentIndexChanged.connect(self.set_preset)
-		self.resolutionCombo.currentIndexChanged.connect(self.set_resolution)
+	
+		self.convertButton.clicked.connect(self.convert) # convert input file accord to selected options
+		self.selectInputButton.clicked.connect(self.select_input_file) # select input file
+		self.sSelectButton.clicked.connect(self.select_srt_file) # select subtitle file
+		self.infoButton.clicked.connect(self.show_info) # show selected file info
+		self.xboxButton.clicked.connect(self.show_xbox_info) # show xbox supported formats
+		self.clearOutputButton.clicked.connect(lambda: self.output.clear()) # clear process output text
+		self.process.readyRead.connect(self.print_output) # show last output from process
+		self.killButton.clicked.connect(self.kill_process) # kills ffmpeg process
 		
-	def set_vcodec(self): self.command.vcodec = self.vCodecCombo.currentText()
-	def set_acodec(self): self.command.acodec = self.aCodecCombo.currentText()
-	def set_vbitrate(self): self.command.vbitrate = self.vBitrateCombo.currentText()
-	def set_abitrate(self): self.command.abitrate = self.aBitrateCombo.currentText()
-	def set_preset(self): self.command.preset = self.vPresetCombo.currentText()
-	def set_resolution(self): self.command.resolution = self.resolutionCombo.currentText()
+		self.vCodecCombo.currentTextChanged.connect(self.command.set_video_codec) # set video codec
+		self.vBitrateCombo.currentTextChanged.connect(self.command.set_video_bitrate) # set video bitrate
+		self.vPresetCombo.currentTextChanged.connect(self.command.set_video_preset) # set video preset
+		self.resolutionCombo.currentTextChanged.connect(self.command.set_video_resolution) # set video resolution
+		
+		self.aCodecCombo.currentTextChanged.connect(self.command.set_audio_codec) # set audio codec
+		self.aBitrateCombo.currentTextChanged.connect(self.command.set_audio_bitrate) # set audio bitrate
+		self.downmixCheckbox.stateChanged.connect(self.command.set_audio_downmix) # set audio downmix
+		self.aVolumeSpinbox.valueChanged.connect(self.command.set_audio_volume) # set audio volume
 	
 	@pyqtSlot()
-	def convert(self):
+	def convert(self) -> None:
 		if self.check_files_are_selected():
-			self.start(self.command.get_args(self.inputFile.text(), self.outputFile.text(), self.sFilePath.text(), self.additionalCmd.text()))
+			inputsDict = {'i': self.inputFile.text(), 'o': self.outputFile.text(), 's': self.sFilePath.text(), 'a': self.additionalCmd.text()}
+			self.start(self.command.get_convert_cmd(**inputsDict))
 			
 	@pyqtSlot()
-	def show_info(self):
+	def show_info(self) -> None:
 		if self.check_files_are_selected():
-			self.start(self.command.get_info(self.inputFile.text()))
+			self.start(self.command.get_info_cmd(self.inputFile.text()))
 		
-	def check_files_are_selected(self):
+	def check_files_are_selected(self) -> bool:
+		# check needed files are selected
 		return True
 		
-	def start(self, args):
-		self.process.start(self.command.get_ffmpeg(), args)
+	def start(self, cmd: Tuple[str, List]) -> None:
+		# start ffmpeg/ffprobe process with desired arguments
+		self.process.start(cmd[0], cmd[1])
 		
 	@pyqtSlot()
-	def print_output(self):
+	def kill_process(self) -> None:
+		self.output.append("Process killed")
+		self.process.kill()
+		
+	@pyqtSlot()
+	def print_output(self) -> None:
 		self.output.append(str(self.process.readAll(), 'latin-1'))
 		
 	@pyqtSlot()
-	def select_input_file(self):
+	def select_input_file(self) -> None:
 		filename = QFileDialog.getOpenFileName(self, "Choose File", self.path)
 		if filename[0]:
 			self.path = filename[0]; self.inputFile.setText(self.path); self.outputFile.setText(self.path)
 			
 	@pyqtSlot()
-	def select_srt_file(self):
+	def select_srt_file(self) -> None:
 		filename = QFileDialog.getOpenFileName(self, "Choose Subtitle", self.path)
 		if filename[0]:
 			self.path = filename[0]; self.sFilePath.setText(self.path)
-
-if __name__ == '__main__':
-	app = QApplication(sys.argv)
-	c2 = Convert2()
-	c2.show()
-	sys.exit(app.exec_())
+	
+	@pyqtSlot()
+	def show_xbox_info(self) -> None:
+		msgBox = QMessageBox();
+		msgBox.setIcon(QMessageBox.Information)
+		msgBox.setText(XBOX_FORMATS)
+		msgBox.setWindowTitle("Xbox Supported Formats")
+		msgBox.setStandardButtons(QMessageBox.Ok)
+		msgBox.exec()
 	

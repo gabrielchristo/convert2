@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>718</width>
-    <height>708</height>
+    <width>631</width>
+    <height>810</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,8 +18,8 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>701</width>
-     <height>691</height>
+     <width>611</width>
+     <height>791</height>
     </rect>
    </property>
    <property name="widgetResizable">
@@ -30,8 +30,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>699</width>
-      <height>689</height>
+      <width>609</width>
+      <height>789</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -93,6 +93,13 @@
          </property>
         </spacer>
        </item>
+       <item>
+        <widget class="QPushButton" name="xboxButton">
+         <property name="text">
+          <string>xbox supported formats</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
@@ -136,7 +143,7 @@
          <item>
           <widget class="QPushButton" name="infoButton">
            <property name="text">
-            <string>info</string>
+            <string>file information</string>
            </property>
           </widget>
          </item>
@@ -232,6 +239,11 @@
               <item>
                <property name="text">
                 <string>libxvid</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>libvpx</string>
                </property>
               </item>
              </widget>
@@ -416,6 +428,26 @@
               <item>
                <property name="text">
                 <string>aac</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>ac3</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>libvorbis</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>libopus</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>libmp3lame</string>
                </property>
               </item>
              </widget>
@@ -688,7 +720,7 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>270</height>
+           <height>350</height>
           </size>
          </property>
          <property name="font">
@@ -723,6 +755,13 @@ color: rgb(255, 255, 255);</string>
           <widget class="QPushButton" name="clearOutputButton">
            <property name="text">
             <string>clear</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="killButton">
+           <property name="text">
+            <string>kill process</string>
            </property>
           </widget>
          </item>
