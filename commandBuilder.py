@@ -1,5 +1,5 @@
 
-from typing import Tuple, List
+from typing import Tuple, List, Dict
 from PyQt5.QtCore import pyqtSlot, QObject
 from constants import *
 
@@ -18,6 +18,7 @@ class CmdBuilder(QObject):
 		self.adownmix = False
 		self.avolume = 100
 		
+		self.sinsert = False
 		self.ssize = 25;
 		self.scolor = "white"
 		
@@ -94,6 +95,7 @@ class CmdBuilder(QObject):
 		cmd += self.get_video_resolution_cmd()
 		cmd += self.get_video_codec_cmd()
 		cmd += self.get_video_bitrate_cmd()
+		cmd += self.get_subtitle_cmd(kwargs.get('s'))
 		cmd += self.get_audio_codec_cmd()
 		cmd += self.get_audio_bitrate_cmd()
 		cmd += self.get_audio_downmix_cmd()
@@ -115,10 +117,26 @@ class CmdBuilder(QObject):
 		if DEBUG: print(volume)
 		self.avolume = volume
 		
-	# todo
-	def get_subtitle(self):
-		return ['-vf subtitles={}:force_style="FontSize={}"'.format(self.sub_path, self.sub_size)]
+	
+	def get_subtitle_cmd(self, subtitle: str) -> List[str]:
+		color = (SUBTITLE_WHITE if self.scolor == "white" else SUBTITLE_YELLOW)
+		if self.sinsert is False: return []
+		else: return VIDEO_FILTER + [INSERT_SUBTITLE_LABEL.format(subtitle, self.ssize, color)]
+	
+
+	@pyqtSlot(str)
+	def set_subtitle_color(self, color: str) -> None:
+		if DEBUG: print(color)
+		self.scolor = color
 		
-		
-		
+	@pyqtSlot(int)
+	def set_subtitle_size(self, size: int) -> None:
+		if DEBUG: print(size)
+		self.ssize = size
+
+	@pyqtSlot(int)
+	def set_subtitle_insert(self, insert: int) -> None:
+		if DEBUG: print(insert)
+		self.sinsert = (False if insert == 0 else True)
+
 		

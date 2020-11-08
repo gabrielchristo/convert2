@@ -94,6 +94,13 @@
         </spacer>
        </item>
        <item>
+        <widget class="QPushButton" name="cheatsheetButton">
+         <property name="text">
+          <string>cheatsheet</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="xboxButton">
          <property name="text">
           <string>xbox supported formats</string>
@@ -660,6 +667,13 @@
         <widget class="QPushButton" name="convertButton">
          <property name="text">
           <string>convert</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="crrtCmdButton">
+         <property name="text">
+          <string>show current command</string>
          </property>
         </widget>
        </item>

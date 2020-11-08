@@ -7,5 +7,7 @@ Ensure that you have ffmpeg and ffprobe on your path
 ### Requirements ###
 
 ```
-pip install PyQt5
+pip install -r requirements.txt
 ```
+
+<img src="screenshot.png" width="647" height="848">
