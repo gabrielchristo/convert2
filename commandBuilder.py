@@ -120,8 +120,9 @@ class CmdBuilder(QObject):
 	
 	def get_subtitle_cmd(self, subtitle: str) -> List[str]:
 		color = (SUBTITLE_WHITE if self.scolor == "white" else SUBTITLE_YELLOW)
+		corrected_path = subtitle.replace('/', '\\\\\\\\').replace(':', '\\\\:') # bug with ffmpeg path chars escaping
 		if self.sinsert is False: return []
-		else: return VIDEO_FILTER + [INSERT_SUBTITLE_LABEL.format(subtitle, self.ssize, color)]
+		else: return VIDEO_FILTER + [INSERT_SUBTITLE_LABEL.format(corrected_path, self.ssize, color)]
 	
 
 	@pyqtSlot(str)

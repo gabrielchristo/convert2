@@ -21,7 +21,7 @@ VIDEO_PRESET = ["-preset:v"]
 # burn subtitle into the video stream
 # receives subtitle file path (utf8), font size, font color (BGR)
 VIDEO_FILTER = ["-filter:v"]
-INSERT_SUBTITLE_LABEL = "subtitles={}:force_style='FontSize={},PrimaryColour=&H{}&'"
+INSERT_SUBTITLE_LABEL = "subtitles={}:force_style=\'FontSize={},PrimaryColour=&H{}\'"
 SUBTITLE_WHITE = "FFFFFF"
 SUBTITLE_YELLOW = "00FFFF"
 
