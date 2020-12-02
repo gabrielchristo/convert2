@@ -73,7 +73,7 @@ class CmdBuilder(QObject):
 		else: return VIDEO_BITRATE + [self.vbitrate] + MAX_RATE + [self.vbitrate] + BUFSIZE
 		
 	def get_audio_codec_cmd(self) -> List[str]:
-		return AUDIO_CODEC + [self.acodec] + (AAC_OPTION if self.acodec == "aac" else [])
+		return AUDIO_CODEC + [self.acodec]
 		
 	def get_video_resolution_cmd(self) -> List[str]:
 		if self.vresolution == "copy": return []
@@ -100,9 +100,9 @@ class CmdBuilder(QObject):
 		cmd += self.get_audio_bitrate_cmd()
 		cmd += self.get_audio_downmix_cmd()
 		cmd += self.get_audio_volume_cmd()
-		cmd += DEFAULT
 		additional = kwargs.get('a')
-		if(len(additional) > 0): cmd += [additional]
+		if(len(additional) > 0): cmd += additional.split()
+		cmd += DEFAULT
 		cmd += [kwargs.get('o')]
 		if DEBUG: print(' '.join(cmd))
 		return FFMPEG, cmd

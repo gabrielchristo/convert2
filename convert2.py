@@ -15,6 +15,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore, uic
 from PyQt5.QtWidgets import QFileDialog, QMainWindow, QInputDialog, QMessageBox
 from PyQt5.QtCore import Qt, QDir, QProcess
 from commandBuilder import *
+from scrollablePopup import *
 
 class Convert2(QMainWindow):
 
@@ -26,6 +27,7 @@ class Convert2(QMainWindow):
 		self.path = QDir.currentPath()
 		self.process = QProcess(self)
 		self.process.setProcessChannelMode(QProcess.MergedChannels)
+		self.popup = scrollablePopup()
 		self.connects()
 		
 	def connects(self):
@@ -34,7 +36,6 @@ class Convert2(QMainWindow):
 		self.selectInputButton.clicked.connect(self.select_input_file) # select input file
 		self.sSelectButton.clicked.connect(self.select_srt_file) # select subtitle file
 		self.infoButton.clicked.connect(self.show_info) # show selected file info
-		self.xboxButton.clicked.connect(self.show_xbox_info) # show xbox supported formats
 		self.clearOutputButton.clicked.connect(lambda: self.output.clear()) # clear process output text
 		self.process.readyRead.connect(self.print_output) # show last output from process
 		self.killButton.clicked.connect(self.kill_process) # kills ffmpeg process
@@ -71,6 +72,10 @@ class Convert2(QMainWindow):
 		
 	def check_files_are_selected(self) -> bool:
 		# check needed files are selected
+		if(self.inputFile.text() == ""):
+			self.show_message_box("Choose a input file", "No file selected"); return False
+		elif(self.sCheckbox.isChecked() and self.sFilePath.text() == ""):
+			self.show_message_box("Choose a subtitle file", "No file selected"); return False
 		return True
 		
 	def start(self, cmd: Tuple[str, List]) -> None:
@@ -97,20 +102,19 @@ class Convert2(QMainWindow):
 		filename = QFileDialog.getOpenFileName(self, "Choose Subtitle", self.path)
 		if filename[0]:
 			self.path = filename[0]; self.sFilePath.setText(self.path)
-	
-	@pyqtSlot()
-	def show_xbox_info(self) -> None:
-		self.show_message_box(XBOX_FORMATS, "Xbox Supported Formats")
 		
 	@pyqtSlot()
 	def show_current_cmd(self) -> None:
-		cmdTuple = self.command.get_convert_cmd(**(self.get_inputs_dict()))
-		self.show_message_box(' '.join(cmdTuple[1]), "Current FFMPEG Command")
+		if self.check_files_are_selected():
+			cmdTuple = self.command.get_convert_cmd(**(self.get_inputs_dict()))
+			self.show_message_box(' '.join([cmdTuple[0]] + cmdTuple[1]), "Current FFMPEG Command")
 		
 	@pyqtSlot()
 	def show_cheatsheet(self) -> None:
-		self.show_message_box(CHEATSHEET, "FFMPEG Cheatsheet")
-	
+		self.popup.setText(CHEATSHEET + XBOX_FORMATS)
+		self.popup.setTitle("FFMPEG Cheatsheet")
+		self.popup.show()
+		
 	def show_message_box(self, text: str, title: str) -> None:
 		msgBox = QMessageBox();
 		msgBox.setIcon(QMessageBox.Information)

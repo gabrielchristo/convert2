@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>631</width>
-    <height>810</height>
+    <width>625</width>
+    <height>678</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>10</x>
      <y>10</y>
      <width>611</width>
-     <height>791</height>
+     <height>661</height>
     </rect>
    </property>
    <property name="widgetResizable">
@@ -31,7 +31,7 @@
       <x>0</x>
       <y>0</y>
       <width>609</width>
-      <height>789</height>
+      <height>659</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -100,13 +100,6 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QPushButton" name="xboxButton">
-         <property name="text">
-          <string>xbox supported formats</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
      <item>
@@ -135,6 +128,12 @@
          </item>
          <item>
           <widget class="QLineEdit" name="inputFile">
+           <property name="minimumSize">
+            <size>
+             <width>330</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -179,7 +178,14 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="outputFile"/>
+          <widget class="QLineEdit" name="outputFile">
+           <property name="minimumSize">
+            <size>
+             <width>325</width>
+             <height>0</height>
+            </size>
+           </property>
+          </widget>
          </item>
          <item>
           <spacer name="horizontalSpacer_5">
@@ -741,7 +747,7 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>350</height>
+           <height>270</height>
           </size>
          </property>
          <property name="font">

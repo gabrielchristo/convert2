@@ -10,4 +10,4 @@ Ensure that you have ffmpeg and ffprobe on your path
 pip install -r requirements.txt
 ```
 
-<img src="screenshot.png" width="647" height="848">
+<img src="screenshot.png" width="641" height="716">
