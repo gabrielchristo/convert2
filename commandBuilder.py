@@ -70,7 +70,9 @@ class CmdBuilder(QObject):
 		
 	def get_video_bitrate_cmd(self) -> List[str]:
 		if self.vbitrate == "copy": return []
-		else: return VIDEO_BITRATE + [self.vbitrate] + MAX_RATE + [self.vbitrate] + BUFSIZE
+		else:
+			vbit = [self.vbitrate]
+			return VIDEO_BITRATE + vbit + MAX_RATE + vbit + BUFSIZE + vbit
 		
 	def get_audio_codec_cmd(self) -> List[str]:
 		return AUDIO_CODEC + [self.acodec]

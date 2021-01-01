@@ -11,7 +11,7 @@ VIDEO_CODEC = ["-c:v"]
 # receives the bitrate
 VIDEO_BITRATE = ["-b:v"]
 MAX_RATE = ["-maxrate"]
-BUFSIZE = ["-bufsize", "1M"]
+BUFSIZE = ["-bufsize"] # removed "1M" buffer 29/12/2020
 # define resolution of video
 # receives scale
 VIDEO_RESOLUTION = ["-s"]
@@ -50,7 +50,7 @@ FILEINFO = HIDE_BANNER + ["-v", "quiet", "-print_format", "json", "-show_format"
 # default values to all ffmpeg commands
 # -threads 0 tells to ffmpeg optimize the cpu and cores use
 # -movflags and +faststart allows to playback the media without have completed the download/conversion
-DEFAULT = ["-threads", "0", "-movflags", "+faststart"]
+DEFAULT = ["-threads", "0"] # removed "-movflags", "+faststart" moov atom options 30/12/2020
 
 XBOX_FORMATS = """<h4>Xbox 360 Supported Formats</h4>
 <p>AVI: Video Simple/Advanced 5Mbps 1280x720@30 | Audio Dolby 2ch/5.1ch or MP3</p>
@@ -94,5 +94,7 @@ CHEATSHEET = """
 <h4>Normalize Audio</h4>
 <p>I:target loudness in LUFs LRA:loudness range TP:true peak</p>
 <p>-af loudnorm=I=-23:LRA=7:tp=-2</p>
-"""
 
+<h4>Solve "Too many packets buffered" problem</h4>
+<p>-max_muxing_queue_size 1024</p>
+"""
