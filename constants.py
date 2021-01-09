@@ -28,7 +28,7 @@ SUBTITLE_YELLOW = "00FFFF"
 # define codec for audio stream
 # receives the desired codec
 AUDIO_CODEC = ["-c:a"]
-AAC_OPTION = ["-aac_coder", "fast"]
+AAC_OPTION = ["-aac_coder", "fast"] # not being used
 # define bitrate for audio stream
 # receives the desired bitrate
 AUDIO_BITRATE = ["-b:a"]
@@ -37,6 +37,9 @@ AUDIO_DOWNMIX = ['-ac', '2']
 # define volume of audio stream
 AUDIO_FILTER = ["-filter:a"]
 AUDIO_VOLUME_LABEL = "volume={}"
+# defines audio sample rate
+# receives desired frequency in Hz
+AUDIO_RATE = ["-ar"]
 
 # hide ffmpeg banner
 HIDE_BANNER = ["-hide_banner"]

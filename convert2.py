@@ -23,16 +23,16 @@ class Convert2(QMainWindow):
 	def __init__(self):
 		super(__class__, self).__init__()
 		uic.loadUi("./convert2.ui", self)
-		self.setWindowTitle("Convert2 - by Gabriel Christo")
+		self.setWindowTitle("Convert2")
 		self.setWindowIcon(QIcon("./icon.png"))
-		self.nameLabel.setVisible(False)
+		self.setWindowFlags(Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
+		self.nameLabel.setVisible(True)
 		self.command = CmdBuilder()
 		self.path = QDir.currentPath()
 		self.process = QProcess(self)
 		self.process.setProcessChannelMode(QProcess.MergedChannels)
 		self.popup = scrollablePopup()
 		self.connects()
-		
 		
 	def connects(self):
 	
@@ -57,6 +57,7 @@ class Convert2(QMainWindow):
 		self.aBitrateCombo.currentTextChanged.connect(self.command.set_audio_bitrate) # set audio bitrate
 		self.downmixCheckbox.stateChanged.connect(self.command.set_audio_downmix) # set audio downmix
 		self.aVolumeSpinbox.valueChanged.connect(self.command.set_audio_volume) # set audio volume
+		self.aRateCombobox.currentTextChanged.connect(self.command.set_audio_rate) # set audio sample rate frequency
 		
 		self.sCheckbox.stateChanged.connect(self.command.set_subtitle_insert) # set subtitle use
 		self.sCheckbox.stateChanged.connect(self.toggle_subtitle_options) # enable/disable subtitle options
@@ -120,6 +121,7 @@ class Convert2(QMainWindow):
 	def show_cheatsheet(self) -> None:
 		self.popup.setText(CHEATSHEET + XBOX_FORMATS)
 		self.popup.setTitle("FFMPEG Cheatsheet")
+		self.popup.setWindowIcon(QIcon("./icon.png"))
 		self.popup.show()
 		
 	def show_message_box(self, text: str, title: str) -> None:
@@ -127,6 +129,7 @@ class Convert2(QMainWindow):
 		msgBox.setIcon(QMessageBox.Information)
 		msgBox.setText(text)
 		msgBox.setWindowTitle(title)
+		msgBox.setWindowIcon(QIcon("./icon.png"))
 		msgBox.setStandardButtons(QMessageBox.Ok)
 		msgBox.exec()
 		
@@ -140,9 +143,7 @@ class Convert2(QMainWindow):
 	@pyqtSlot(str)
 	def toggle_audio_options(self, crrtText: str) -> None:
 		bool = False if crrtText == "copy" else True
-		self.aBitrateCombo.setEnabled(bool)
 		self.aVolumeSpinbox.setEnabled(bool)
-		self.downmixCheckbox.setEnabled(bool)
 	
 	@pyqtSlot(int)
 	def toggle_subtitle_options(self, crrtState: int) -> None:

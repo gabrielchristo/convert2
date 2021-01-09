@@ -17,6 +17,7 @@ class CmdBuilder(QObject):
 		self.abitrate = "copy"
 		self.adownmix = False
 		self.avolume = 100
+		self.arate = "copy"
 		
 		self.sinsert = False
 		self.ssize = 25;
@@ -69,7 +70,7 @@ class CmdBuilder(QObject):
 		else: return AUDIO_BITRATE + [self.abitrate]
 		
 	def get_video_bitrate_cmd(self) -> List[str]:
-		if self.vbitrate == "copy": return []
+		if self.vbitrate == "copy" or self.vcodec == "copy": return []
 		else:
 			vbit = [self.vbitrate]
 			return VIDEO_BITRATE + vbit + MAX_RATE + vbit + BUFSIZE + vbit
@@ -78,11 +79,11 @@ class CmdBuilder(QObject):
 		return AUDIO_CODEC + [self.acodec]
 		
 	def get_video_resolution_cmd(self) -> List[str]:
-		if self.vresolution == "copy": return []
+		if self.vresolution == "copy" or self.vcodec == "copy": return []
 		else: return VIDEO_RESOLUTION + [self.vresolution]
 		
 	def get_video_preset_cmd(self) -> List[str]:
-		if self.vpreset == "medium": return []
+		if self.vpreset == "medium" or self.vcodec == "copy": return []
 		else: return VIDEO_PRESET + [self.vpreset]
 		
 	def get_audio_downmix_cmd(self) -> List[str]:
@@ -100,6 +101,7 @@ class CmdBuilder(QObject):
 		cmd += self.get_subtitle_cmd(kwargs.get('s'))
 		cmd += self.get_audio_codec_cmd()
 		cmd += self.get_audio_bitrate_cmd()
+		cmd += self.get_audio_rate_cmd()
 		cmd += self.get_audio_downmix_cmd()
 		cmd += self.get_audio_volume_cmd()
 		additional = kwargs.get('a')
@@ -111,7 +113,7 @@ class CmdBuilder(QObject):
 		
 		
 	def get_audio_volume_cmd(self) -> List[str]:
-		if self.avolume == 100: return []
+		if self.avolume == 100 or self.acodec == "copy": return []
 		else: return AUDIO_FILTER + [AUDIO_VOLUME_LABEL.format(self.avolume/100)]
 		
 	@pyqtSlot(int)
@@ -141,5 +143,13 @@ class CmdBuilder(QObject):
 	def set_subtitle_insert(self, insert: int) -> None:
 		if DEBUG: print(insert)
 		self.sinsert = (False if insert == 0 else True)
-
+		
+	@pyqtSlot(str)
+	def set_audio_rate(self, rate: str) -> None:
+		if DEBUG: print(rate)
+		self.arate = rate
+		
+	def get_audio_rate_cmd(self) -> List[str]:
+		if self.arate == "copy": return []
+		else: return AUDIO_RATE + [self.arate]
 		

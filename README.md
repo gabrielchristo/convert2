@@ -14,4 +14,4 @@ pip install -r requirements.txt
 python main.py
 ```
 
-<img src="screenshot.png" width="641" height="716">
+<img src="screenshot.png" width="747" height="719">

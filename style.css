@@ -11,10 +11,7 @@ Gray				rgb(185, 190, 192)
 
 https://doc.qt.io/qt-5/stylesheet-reference.html
 
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(42, 44, 111, 255), stop:0.521368 rgba(28, 29, 73, 255));
-
 */
-
 
 /* Cheatsheet */
 scrollablePopup QLabel{
@@ -88,6 +85,7 @@ QLineEdit {
     background: rgb(48, 49, 59);
 	color: rgb(60, 231, 195);
     selection-background-color: rgb(185, 190, 192);
+	height: 22px;
 }
 QLineEdit:hover, QLineEdit:focus{
 	border: 2px solid rgb(86, 133, 184);
@@ -116,6 +114,9 @@ QPushButton:pressed {
 }
 QPushButton:!enabled{
 	color: rgb(185, 190, 192);
+}
+QPushButton#sSelectButton{
+	padding: 4px 0px;
 }
 	
 	
