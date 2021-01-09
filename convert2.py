@@ -14,6 +14,7 @@ TODO:
 from PyQt5 import QtWidgets, QtGui, QtCore, uic
 from PyQt5.QtWidgets import QFileDialog, QMainWindow, QInputDialog, QMessageBox
 from PyQt5.QtCore import Qt, QDir, QProcess
+from PyQt5.QtGui import QColor, QIcon
 from commandBuilder import *
 from scrollablePopup import *
 
@@ -23,6 +24,7 @@ class Convert2(QMainWindow):
 		super(__class__, self).__init__()
 		uic.loadUi("./convert2.ui", self)
 		self.setWindowTitle("Convert2")
+		self.setWindowIcon(QIcon("./icon.png"))
 		self.command = CmdBuilder()
 		self.path = QDir.currentPath()
 		self.process = QProcess(self)
