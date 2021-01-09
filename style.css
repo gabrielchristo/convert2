@@ -92,8 +92,10 @@ QLineEdit {
 QLineEdit:hover, QLineEdit:focus{
 	border: 2px solid rgb(86, 133, 184);
 }
-/* todo: lineedit enabled/disabled */
-
+QLineEdit:!enabled{
+	color: rgb(185, 190, 192);
+	border: 2px solid rgb(185, 190, 192);
+}
 
 
 /* Button */
@@ -103,7 +105,7 @@ QPushButton {
 	border-radius: 5px;
 	text-align: center;
 	padding: 4px 6px;
-	color:rgb(60, 231, 195);
+	color: rgb(60, 231, 195);
 	min-width: 6em;
 }
 QPushButton:hover {
@@ -112,7 +114,9 @@ QPushButton:hover {
 QPushButton:pressed {
 	background-color: rgb(28, 29, 34);
 }
-
+QPushButton:!enabled{
+	color: rgb(185, 190, 192);
+}
 	
 	
 	

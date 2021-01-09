@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QScrollArea" name="scrollArea">
    <property name="geometry">
     <rect>
@@ -251,6 +254,11 @@
               </item>
               <item>
                <property name="text">
+                <string>libx265</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
                 <string>libxvid</string>
                </property>
               </item>
@@ -274,6 +282,9 @@
             </item>
             <item>
              <widget class="QComboBox" name="vPresetCombo">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <item>
                <property name="text">
                 <string>medium</string>
@@ -292,6 +303,11 @@
               <item>
                <property name="text">
                 <string>veryfast</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>faster</string>
                </property>
               </item>
               <item>
@@ -329,6 +345,9 @@
             </item>
             <item>
              <widget class="QComboBox" name="vBitrateCombo">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <item>
                <property name="text">
                 <string>copy</string>
@@ -379,6 +398,9 @@
             </item>
             <item>
              <widget class="QComboBox" name="resolutionCombo">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <item>
                <property name="text">
                 <string>copy</string>
@@ -478,9 +500,17 @@
             </item>
             <item>
              <widget class="QComboBox" name="aBitrateCombo">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <item>
                <property name="text">
                 <string>copy</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>320k</string>
                </property>
               </item>
               <item>
@@ -495,7 +525,17 @@
               </item>
               <item>
                <property name="text">
+                <string>96k</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
                 <string>64k</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>32k</string>
                </property>
               </item>
              </widget>
@@ -513,6 +553,9 @@
             </item>
             <item>
              <widget class="QSpinBox" name="aVolumeSpinbox">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="maximum">
                <number>150</number>
               </property>
@@ -541,6 +584,9 @@
             </item>
             <item>
              <widget class="QCheckBox" name="downmixCheckbox">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string/>
               </property>
@@ -585,10 +631,17 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="sFilePath"/>
+             <widget class="QLineEdit" name="sFilePath">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QPushButton" name="sSelectButton">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>select</string>
               </property>
@@ -607,6 +660,9 @@
             </item>
             <item>
              <widget class="QComboBox" name="subColorCombo">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <item>
                <property name="text">
                 <string>white</string>
@@ -632,6 +688,9 @@
             </item>
             <item>
              <widget class="QSpinBox" name="subSizeSpinbox">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="minimum">
                <number>1</number>
               </property>

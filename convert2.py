@@ -23,8 +23,9 @@ class Convert2(QMainWindow):
 	def __init__(self):
 		super(__class__, self).__init__()
 		uic.loadUi("./convert2.ui", self)
-		self.setWindowTitle("Convert2")
+		self.setWindowTitle("Convert2 - by Gabriel Christo")
 		self.setWindowIcon(QIcon("./icon.png"))
+		self.nameLabel.setVisible(False)
 		self.command = CmdBuilder()
 		self.path = QDir.currentPath()
 		self.process = QProcess(self)
@@ -32,29 +33,33 @@ class Convert2(QMainWindow):
 		self.popup = scrollablePopup()
 		self.connects()
 		
+		
 	def connects(self):
 	
-		self.convertButton.clicked.connect(self.convert) # convert input file accord to selected options
+		self.convertButton.clicked.connect(self.convert) # convert input file according to selected options
 		self.selectInputButton.clicked.connect(self.select_input_file) # select input file
 		self.sSelectButton.clicked.connect(self.select_srt_file) # select subtitle file
 		self.infoButton.clicked.connect(self.show_info) # show selected file info
 		self.clearOutputButton.clicked.connect(lambda: self.output.clear()) # clear process output text
 		self.process.readyRead.connect(self.print_output) # show last output from process
 		self.killButton.clicked.connect(self.kill_process) # kills ffmpeg process
-		self.crrtCmdButton.clicked.connect(self.show_current_cmd) # show current command accord to selected options
+		self.crrtCmdButton.clicked.connect(self.show_current_cmd) # show current command according to selected options
 		self.cheatsheetButton.clicked.connect(self.show_cheatsheet) # show some ffmpeg commands useful information
 		
 		self.vCodecCombo.currentTextChanged.connect(self.command.set_video_codec) # set video codec
+		self.vCodecCombo.currentTextChanged.connect(self.toggle_video_options) # enable/disable video options
 		self.vBitrateCombo.currentTextChanged.connect(self.command.set_video_bitrate) # set video bitrate
 		self.vPresetCombo.currentTextChanged.connect(self.command.set_video_preset) # set video preset
 		self.resolutionCombo.currentTextChanged.connect(self.command.set_video_resolution) # set video resolution
 		
 		self.aCodecCombo.currentTextChanged.connect(self.command.set_audio_codec) # set audio codec
+		self.aCodecCombo.currentTextChanged.connect(self.toggle_audio_options) # enable/disable audio options
 		self.aBitrateCombo.currentTextChanged.connect(self.command.set_audio_bitrate) # set audio bitrate
 		self.downmixCheckbox.stateChanged.connect(self.command.set_audio_downmix) # set audio downmix
 		self.aVolumeSpinbox.valueChanged.connect(self.command.set_audio_volume) # set audio volume
 		
 		self.sCheckbox.stateChanged.connect(self.command.set_subtitle_insert) # set subtitle use
+		self.sCheckbox.stateChanged.connect(self.toggle_subtitle_options) # enable/disable subtitle options
 		self.subColorCombo.currentTextChanged.connect(self.command.set_subtitle_color) # set subtitle color
 		self.subSizeSpinbox.valueChanged.connect(self.command.set_subtitle_size) # set subtitle size
 	
@@ -124,4 +129,26 @@ class Convert2(QMainWindow):
 		msgBox.setWindowTitle(title)
 		msgBox.setStandardButtons(QMessageBox.Ok)
 		msgBox.exec()
+		
+	@pyqtSlot(str)
+	def toggle_video_options(self, crrtText: str) -> None:
+		bool = False if crrtText == "copy" else True
+		self.vBitrateCombo.setEnabled(bool)
+		self.vPresetCombo.setEnabled(bool)
+		self.resolutionCombo.setEnabled(bool)
+		
+	@pyqtSlot(str)
+	def toggle_audio_options(self, crrtText: str) -> None:
+		bool = False if crrtText == "copy" else True
+		self.aBitrateCombo.setEnabled(bool)
+		self.aVolumeSpinbox.setEnabled(bool)
+		self.downmixCheckbox.setEnabled(bool)
+	
+	@pyqtSlot(int)
+	def toggle_subtitle_options(self, crrtState: int) -> None:
+		bool = False if crrtState == 0 else True
+		self.sFilePath.setEnabled(bool)
+		self.subColorCombo.setEnabled(bool)
+		self.subSizeSpinbox.setEnabled(bool)
+		self.sSelectButton.setEnabled(bool)
 		
