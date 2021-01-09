@@ -1,0 +1,118 @@
+
+/* Colors
+
+BaseBlue			rgb(28, 29, 34)
+LighterBaseBlue1	rgb(48, 49, 59)
+LighterBaseBlue2	rgb(61,61, 74)
+BlueBorder			rgb(86, 133, 184)
+GreenText			rgb(60, 231, 195)
+DarkerGreenText		rgb(49, 189, 158)
+Gray				rgb(185, 190, 192)
+
+https://doc.qt.io/qt-5/stylesheet-reference.html
+
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(42, 44, 111, 255), stop:0.521368 rgba(28, 29, 73, 255));
+
+*/
+
+
+/* Cheatsheet */
+scrollablePopup QLabel{
+	color: rgb(60, 231, 195);
+	background: rgb(48, 49, 59);
+}
+
+
+/* Combobox*/
+QComboBox{
+	background-color: rgb(48, 49, 59);
+	border-radius: 3px;
+	border: 2px solid rgb(48, 49, 59);
+	padding: 3px;
+	padding-left: 10px;
+	color: rgb(60, 231, 195);
+	min-width: 4em;
+}
+QComboBox:enabled{
+	background-color: rgb(48, 49, 59);
+	color: rgb(60, 231, 195);
+}
+QComboBox:!enabled{
+	color: rgb(185, 190, 192);
+}
+QComboBox:hover{
+	border: 2px solid rgb(86, 133, 184);
+}
+QComboBox QAbstractItemView {
+	color: rgb(49, 189, 158);
+	background-color: rgb(28, 29, 34);
+	padding: 10px 5px;
+	selection-background-color: rgb(61, 61, 74);
+	outline: 0;
+}
+QComboBox::drop-down {
+	subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 15px;
+    border-left-width: 1px;
+    border-left-color: rgb(60, 231, 195);
+    border-left-style: solid;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+QComboBox::drop-down:!enabled{
+	border-left-color: rgb(185, 190, 192);
+}
+
+
+
+/* Groupbox */
+QGroupBox{
+	border: 2px solid rgb(49, 189, 158);
+	border-radius: 3px;
+	margin-top: 1ex;
+}
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 0 3px;
+}
+
+
+
+/* LineEdit */
+QLineEdit {
+    border: 2px solid rgb(49, 189, 158);
+    border-radius: 5px;
+    padding: 0 8px;
+    background: rgb(48, 49, 59);
+	color: rgb(60, 231, 195);
+    selection-background-color: rgb(185, 190, 192);
+}
+QLineEdit:hover, QLineEdit:focus{
+	border: 2px solid rgb(86, 133, 184);
+}
+/* todo: lineedit enabled/disabled */
+
+
+
+/* Button */
+QPushButton {
+	border: 2px solid rgb(48, 49, 59);
+	background-color: rgb(48, 49, 59);
+	border-radius: 5px;
+	text-align: center;
+	padding: 4px 6px;
+	color:rgb(60, 231, 195);
+	min-width: 6em;
+}
+QPushButton:hover {
+	border: 2px solid rgb(86, 133, 184);
+}
+QPushButton:pressed {
+	background-color: rgb(28, 29, 34);
+}
+
+	
+	
+	
