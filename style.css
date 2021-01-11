@@ -95,6 +95,12 @@ QLineEdit:!enabled{
 	border: 2px solid rgb(185, 190, 192);
 }
 
+/* TextEdit */
+QTextEdit{
+	border: 2px solid rgb(49, 189, 158);
+	border-radius: 5px;
+}
+
 
 /* Button */
 QPushButton {

@@ -8,16 +8,16 @@ class CmdBuilder(QObject):
 	def __init__(self):
 		super(__class__, self).__init__()
 	
-		self.vcodec = "copy"
-		self.vbitrate = "copy"
+		self.vcodec = COPY
+		self.vbitrate = COPY
 		self.vpreset = "medium"
-		self.vresolution = "copy"
+		self.vresolution = COPY
 		
-		self.acodec = "copy"
-		self.abitrate = "copy"
+		self.acodec = COPY
+		self.abitrate = COPY
 		self.adownmix = False
 		self.avolume = 100
-		self.arate = "copy"
+		self.arate = COPY
 		
 		self.sinsert = False
 		self.ssize = 25;
@@ -66,11 +66,11 @@ class CmdBuilder(QObject):
 		return VIDEO_CODEC + [self.vcodec]
 		
 	def get_audio_bitrate_cmd(self) -> List[str]:
-		if self.abitrate == "copy": return []
+		if self.abitrate == COPY or self.acodec == COPY: return []
 		else: return AUDIO_BITRATE + [self.abitrate]
 		
 	def get_video_bitrate_cmd(self) -> List[str]:
-		if self.vbitrate == "copy" or self.vcodec == "copy": return []
+		if self.vbitrate == COPY or self.vcodec == COPY: return []
 		else:
 			vbit = [self.vbitrate]
 			return VIDEO_BITRATE + vbit + MAX_RATE + vbit + BUFSIZE + vbit
@@ -79,15 +79,15 @@ class CmdBuilder(QObject):
 		return AUDIO_CODEC + [self.acodec]
 		
 	def get_video_resolution_cmd(self) -> List[str]:
-		if self.vresolution == "copy" or self.vcodec == "copy": return []
+		if self.vresolution == COPY or self.vcodec == COPY: return []
 		else: return VIDEO_RESOLUTION + [self.vresolution]
 		
 	def get_video_preset_cmd(self) -> List[str]:
-		if self.vpreset == "medium" or self.vcodec == "copy": return []
+		if self.vpreset == "medium" or self.vcodec == COPY: return []
 		else: return VIDEO_PRESET + [self.vpreset]
 		
 	def get_audio_downmix_cmd(self) -> List[str]:
-		if self.adownmix is True: return AUDIO_DOWNMIX
+		if self.adownmix is True and self.acodec != COPY: return AUDIO_DOWNMIX
 		else: return []
 		
 	def get_convert_cmd(self, **kwargs) -> Tuple[str, List]:
@@ -113,7 +113,7 @@ class CmdBuilder(QObject):
 		
 		
 	def get_audio_volume_cmd(self) -> List[str]:
-		if self.avolume == 100 or self.acodec == "copy": return []
+		if self.avolume == 100 or self.acodec == COPY: return []
 		else: return AUDIO_FILTER + [AUDIO_VOLUME_LABEL.format(self.avolume/100)]
 		
 	@pyqtSlot(int)
@@ -150,6 +150,6 @@ class CmdBuilder(QObject):
 		self.arate = rate
 		
 	def get_audio_rate_cmd(self) -> List[str]:
-		if self.arate == "copy": return []
+		if self.arate == COPY or self.acodec == COPY: return []
 		else: return AUDIO_RATE + [self.arate]
 		

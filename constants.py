@@ -1,4 +1,12 @@
-DEBUG = False
+DEBUG = True
+
+COPY = "copy"
+ICON = "./icon.png"
+LED_HEIGHT = 23
+GREEN_LED = "./green_led.png"
+RED_LED = "./red_led.png"
+RUNNING = "Process is running"
+NOT_RUNNING = "Process is not running"
 
 # ffmpeg executable names
 FFMPEG = "ffmpeg"

@@ -549,7 +549,7 @@
             <item>
              <widget class="QComboBox" name="aBitrateCombo">
               <property name="enabled">
-               <bool>true</bool>
+               <bool>false</bool>
               </property>
               <item>
                <property name="text">
@@ -651,7 +651,7 @@
             <item>
              <widget class="QCheckBox" name="downmixCheckbox">
               <property name="enabled">
-               <bool>true</bool>
+               <bool>false</bool>
               </property>
               <property name="text">
                <string/>
@@ -677,6 +677,9 @@
             </item>
             <item>
              <widget class="QComboBox" name="aRateCombobox">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <item>
                <property name="text">
                 <string>copy</string>
@@ -1033,6 +1036,32 @@ color: rgb(255, 255, 255);</string>
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="ledLabel">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="processStatusLabel">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Process is not running</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>

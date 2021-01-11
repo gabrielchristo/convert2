@@ -5,16 +5,21 @@ by Gabriel Christo
 10/2020
 
 TODO:
-	
-	logica combobox (só muda se transcodar video ou audio)
-	overwrite quit method event
+		
+	overwrite quit method event (check process still running)
+	bitrate calculator
+	video fps
+	video bitrate lineedit and unit combobox
+	downmix to mono (radio button)
+	style scrollbar
+	check file exists before start
 
 """
 
 from PyQt5 import QtWidgets, QtGui, QtCore, uic
 from PyQt5.QtWidgets import QFileDialog, QMainWindow, QInputDialog, QMessageBox
 from PyQt5.QtCore import Qt, QDir, QProcess
-from PyQt5.QtGui import QColor, QIcon
+from PyQt5.QtGui import QColor, QIcon, QPixmap
 from commandBuilder import *
 from scrollablePopup import *
 
@@ -24,7 +29,7 @@ class Convert2(QMainWindow):
 		super(__class__, self).__init__()
 		uic.loadUi("./convert2.ui", self)
 		self.setWindowTitle("Convert2")
-		self.setWindowIcon(QIcon("./icon.png"))
+		self.setWindowIcon(QIcon(ICON))
 		self.setWindowFlags(Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
 		self.nameLabel.setVisible(True)
 		self.command = CmdBuilder()
@@ -33,6 +38,7 @@ class Convert2(QMainWindow):
 		self.process.setProcessChannelMode(QProcess.MergedChannels)
 		self.popup = scrollablePopup()
 		self.connects()
+		self.ledLabel.setPixmap(QPixmap(RED_LED).scaledToHeight(LED_HEIGHT))
 		
 	def connects(self):
 	
@@ -42,6 +48,8 @@ class Convert2(QMainWindow):
 		self.infoButton.clicked.connect(self.show_info) # show selected file info
 		self.clearOutputButton.clicked.connect(lambda: self.output.clear()) # clear process output text
 		self.process.readyRead.connect(self.print_output) # show last output from process
+		self.process.started.connect(self.process_started) # set green led and updates label when starting process
+		self.process.finished.connect(self.process_finished) # set red led and updates label when process is finished
 		self.killButton.clicked.connect(self.kill_process) # kills ffmpeg process
 		self.crrtCmdButton.clicked.connect(self.show_current_cmd) # show current command according to selected options
 		self.cheatsheetButton.clicked.connect(self.show_cheatsheet) # show some ffmpeg commands useful information
@@ -121,7 +129,7 @@ class Convert2(QMainWindow):
 	def show_cheatsheet(self) -> None:
 		self.popup.setText(CHEATSHEET + XBOX_FORMATS)
 		self.popup.setTitle("FFMPEG Cheatsheet")
-		self.popup.setWindowIcon(QIcon("./icon.png"))
+		self.popup.setWindowIcon(QIcon(ICON))
 		self.popup.show()
 		
 	def show_message_box(self, text: str, title: str) -> None:
@@ -129,21 +137,24 @@ class Convert2(QMainWindow):
 		msgBox.setIcon(QMessageBox.Information)
 		msgBox.setText(text)
 		msgBox.setWindowTitle(title)
-		msgBox.setWindowIcon(QIcon("./icon.png"))
+		msgBox.setWindowIcon(QIcon(ICON))
 		msgBox.setStandardButtons(QMessageBox.Ok)
 		msgBox.exec()
 		
 	@pyqtSlot(str)
 	def toggle_video_options(self, crrtText: str) -> None:
-		bool = False if crrtText == "copy" else True
+		bool = False if crrtText == COPY else True
 		self.vBitrateCombo.setEnabled(bool)
 		self.vPresetCombo.setEnabled(bool)
 		self.resolutionCombo.setEnabled(bool)
 		
 	@pyqtSlot(str)
 	def toggle_audio_options(self, crrtText: str) -> None:
-		bool = False if crrtText == "copy" else True
+		bool = False if crrtText == COPY else True
+		self.aBitrateCombo.setEnabled(bool)
 		self.aVolumeSpinbox.setEnabled(bool)
+		self.downmixCheckbox.setEnabled(bool)
+		self.aRateCombobox.setEnabled(bool)
 	
 	@pyqtSlot(int)
 	def toggle_subtitle_options(self, crrtState: int) -> None:
@@ -152,4 +163,16 @@ class Convert2(QMainWindow):
 		self.subColorCombo.setEnabled(bool)
 		self.subSizeSpinbox.setEnabled(bool)
 		self.sSelectButton.setEnabled(bool)
+		
+	@pyqtSlot()	
+	def process_started(self) -> None:
+		if DEBUG: print(RUNNING)
+		self.processStatusLabel.setText(RUNNING)
+		self.ledLabel.setPixmap(QPixmap(GREEN_LED).scaledToHeight(LED_HEIGHT))
+		
+	@pyqtSlot()
+	def process_finished(self) -> None:
+		if DEBUG: print(NOT_RUNNING)
+		self.processStatusLabel.setText(NOT_RUNNING)
+		self.ledLabel.setPixmap(QPixmap(RED_LED).scaledToHeight(LED_HEIGHT))
 		
