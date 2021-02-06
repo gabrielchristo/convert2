@@ -7,6 +7,8 @@ GREEN_LED = "./green_led.png"
 RED_LED = "./red_led.png"
 RUNNING = "Process is running"
 NOT_RUNNING = "Process is not running"
+SUBTITLE_ENCODING = "Make sure you have a valid UTF-8 encoded SRT file"
+FILE_CONTAINERS = "Media Files (*.mkv *.mp4 *.3gp *.avi *.wmv *.flv *.ts *.mpg *.mov *.rmvb *.vob *.webm)"
 
 # ffmpeg executable names
 FFMPEG = "ffmpeg"
@@ -29,7 +31,7 @@ VIDEO_PRESET = ["-preset:v"]
 # burn subtitle into the video stream
 # receives subtitle file path (utf8), font size, font color (BGR)
 VIDEO_FILTER = ["-filter:v"]
-INSERT_SUBTITLE_LABEL = "subtitles={}:force_style=\'FontSize={},PrimaryColour=&H{}\'"
+INSERT_SUBTITLE_LABEL = "subtitles={}:force_style=\'FontSize={},PrimaryColour=&H{},Bold=1,Shadow=1\'"
 SUBTITLE_WHITE = "FFFFFF"
 SUBTITLE_YELLOW = "00FFFF"
 
@@ -108,4 +110,15 @@ CHEATSHEET = """
 
 <h4>Solve "Too many packets buffered" problem</h4>
 <p>-max_muxing_queue_size 1024</p>
+
+<h4>Resolution Guide</h4>
+<p>hd2160 - 3840x2160</p>
+<p>hd1440 - 2560x1440</p>
+<p>hd1080 - 1920x1080</p>
+<p>hd720 - 1280x720</p>
+<p>hd480 - 854x480</p>
+<p>vga - 640x480</p>
+<p>hd360 - 640x360</p>
+<p>qvga - 320x240</p>
+<p>qqvga - 160x120</p>
 """

@@ -13,6 +13,13 @@ TODO:
 	downmix to mono (radio button)
 	style scrollbar
 	check file exists before start
+	256k audio bitrate
+	utf8 subtitle warning
+	bold/shadow subtitles
+	output file select button
+	remove bitCalc maximize option
+	add date and hour to log out
+	save log button (with config)
 
 """
 
@@ -22,6 +29,8 @@ from PyQt5.QtCore import Qt, QDir, QProcess
 from PyQt5.QtGui import QColor, QIcon, QPixmap
 from commandBuilder import *
 from scrollablePopup import *
+
+from bitrateCalculator import *
 
 class Convert2(QMainWindow):
 
@@ -39,11 +48,13 @@ class Convert2(QMainWindow):
 		self.popup = scrollablePopup()
 		self.connects()
 		self.ledLabel.setPixmap(QPixmap(RED_LED).scaledToHeight(LED_HEIGHT))
+		self.bitCalculator = BitrateCalculator()
 		
 	def connects(self):
 	
 		self.convertButton.clicked.connect(self.convert) # convert input file according to selected options
 		self.selectInputButton.clicked.connect(self.select_input_file) # select input file
+		self.outFileButton.clicked.connect(self.select_output_file) # select output file
 		self.sSelectButton.clicked.connect(self.select_srt_file) # select subtitle file
 		self.infoButton.clicked.connect(self.show_info) # show selected file info
 		self.clearOutputButton.clicked.connect(lambda: self.output.clear()) # clear process output text
@@ -53,6 +64,7 @@ class Convert2(QMainWindow):
 		self.killButton.clicked.connect(self.kill_process) # kills ffmpeg process
 		self.crrtCmdButton.clicked.connect(self.show_current_cmd) # show current command according to selected options
 		self.cheatsheetButton.clicked.connect(self.show_cheatsheet) # show some ffmpeg commands useful information
+		self.bitCalcButton.clicked.connect(self.show_bitrate_calculator) # show bitrate calculator window
 		
 		self.vCodecCombo.currentTextChanged.connect(self.command.set_video_codec) # set video codec
 		self.vCodecCombo.currentTextChanged.connect(self.toggle_video_options) # enable/disable video options
@@ -69,6 +81,7 @@ class Convert2(QMainWindow):
 		
 		self.sCheckbox.stateChanged.connect(self.command.set_subtitle_insert) # set subtitle use
 		self.sCheckbox.stateChanged.connect(self.toggle_subtitle_options) # enable/disable subtitle options
+		self.sCheckbox.stateChanged.connect(self.show_subtitle_encoding_warning) # show subtitle char encoding warning
 		self.subColorCombo.currentTextChanged.connect(self.command.set_subtitle_color) # set subtitle color
 		self.subSizeSpinbox.valueChanged.connect(self.command.set_subtitle_size) # set subtitle size
 	
@@ -109,9 +122,15 @@ class Convert2(QMainWindow):
 		
 	@pyqtSlot()
 	def select_input_file(self) -> None:
-		filename = QFileDialog.getOpenFileName(self, "Choose File", self.path)
+		filename = QFileDialog.getOpenFileName(self, "Choose File", self.path, FILE_CONTAINERS)
 		if filename[0]:
-			self.path = filename[0]; self.inputFile.setText(self.path); self.outputFile.setText(self.path)
+			self.path = filename[0]; self.inputFile.setText(self.path)
+			
+	@pyqtSlot()
+	def select_output_file(self) -> None:
+		filename = QFileDialog.getSaveFileName(self, "Choose File", self.path, FILE_CONTAINERS)
+		if filename[0]:
+			self.outputFile.setText(filename[0])
 			
 	@pyqtSlot()
 	def select_srt_file(self) -> None:
@@ -131,6 +150,10 @@ class Convert2(QMainWindow):
 		self.popup.setTitle("FFMPEG Cheatsheet")
 		self.popup.setWindowIcon(QIcon(ICON))
 		self.popup.show()
+	
+	@pyqtSlot()
+	def show_bitrate_calculator(self) -> None:
+		self.bitCalculator.show()
 		
 	def show_message_box(self, text: str, title: str) -> None:
 		msgBox = QMessageBox();
@@ -141,12 +164,19 @@ class Convert2(QMainWindow):
 		msgBox.setStandardButtons(QMessageBox.Ok)
 		msgBox.exec()
 		
+	@pyqtSlot(int)
+	def show_subtitle_encoding_warning(self, checkboxState: int) -> None:
+		if checkboxState != 0: self.show_message_box(SUBTITLE_ENCODING, "Char Encoding")
+		
 	@pyqtSlot(str)
 	def toggle_video_options(self, crrtText: str) -> None:
 		bool = False if crrtText == COPY else True
 		self.vBitrateCombo.setEnabled(bool)
 		self.vPresetCombo.setEnabled(bool)
 		self.resolutionCombo.setEnabled(bool)
+		# subtitle logic below
+		self.sCheckbox.setEnabled(bool)
+		self.toggle_subtitle_options(bool and self.sCheckbox.isChecked())
 		
 	@pyqtSlot(str)
 	def toggle_audio_options(self, crrtText: str) -> None:

@@ -9,7 +9,7 @@ class scrollablePopup(QScrollArea):
 		self._widget = QWidget()
 		self._layout = QVBoxLayout(self._widget)
 		self._layout.setAlignment(Qt.AlignTop)
-		self._layout.setContentsMargins(0, 0, 0, 0)
+		self._layout.setContentsMargins(7, 7, 0, 7)
 		self._label = QLabel()
 		self._label.setTextInteractionFlags(Qt.TextSelectableByMouse)
 		self._layout.addWidget(self._label)

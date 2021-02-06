@@ -13,13 +13,6 @@ https://doc.qt.io/qt-5/stylesheet-reference.html
 
 */
 
-/* Cheatsheet */
-scrollablePopup QLabel{
-	color: rgb(60, 231, 195);
-	background: rgb(48, 49, 59);
-}
-
-
 /* Combobox*/
 QComboBox{
 	background-color: rgb(48, 49, 59);
@@ -96,14 +89,14 @@ QLineEdit:!enabled{
 }
 
 /* TextEdit */
-QTextEdit{
+Convert2 QTextEdit{
 	border: 2px solid rgb(49, 189, 158);
 	border-radius: 5px;
 }
 
 
 /* Button */
-QPushButton {
+Convert2 QPushButton {
 	border: 2px solid rgb(48, 49, 59);
 	background-color: rgb(48, 49, 59);
 	border-radius: 5px;
@@ -112,16 +105,16 @@ QPushButton {
 	color: rgb(60, 231, 195);
 	min-width: 6em;
 }
-QPushButton:hover {
+Convert2 QPushButton:hover {
 	border: 2px solid rgb(86, 133, 184);
 }
-QPushButton:pressed {
+Convert2 QPushButton:pressed {
 	background-color: rgb(28, 29, 34);
 }
-QPushButton:!enabled{
+Convert2 QPushButton:!enabled{
 	color: rgb(185, 190, 192);
 }
-QPushButton#sSelectButton{
+Convert2 QPushButton#sSelectButton{
 	padding: 4px 0px;
 }
 	

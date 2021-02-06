@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>731</width>
-    <height>681</height>
+    <width>732</width>
+    <height>686</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,7 +22,7 @@
      <x>0</x>
      <y>0</y>
      <width>731</width>
-     <height>681</height>
+     <height>685</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -37,7 +37,7 @@
       <x>0</x>
       <y>0</y>
       <width>729</width>
-      <height>679</height>
+      <height>683</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -101,6 +101,13 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="bitCalcButton">
+         <property name="text">
+          <string>Bitrate Calculator</string>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QPushButton" name="cheatsheetButton">
@@ -193,6 +200,13 @@
              <width>435</width>
              <height>0</height>
             </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="outFileButton">
+           <property name="text">
+            <string>Select</string>
            </property>
           </widget>
          </item>
@@ -563,6 +577,11 @@
               </item>
               <item>
                <property name="text">
+                <string>256k</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
                 <string>192k</string>
                </property>
               </item>
@@ -763,6 +782,9 @@
             </item>
             <item>
              <widget class="QCheckBox" name="sCheckbox">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string/>
               </property>
