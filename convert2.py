@@ -7,18 +7,11 @@ by Gabriel Christo
 TODO:
 		
 	overwrite quit method event (check process still running)
-	bitrate calculator
 	video fps
 	video bitrate lineedit and unit combobox
 	downmix to mono (radio button)
 	style scrollbar
 	check file exists before start
-	256k audio bitrate
-	utf8 subtitle warning
-	bold/shadow subtitles
-	output file select button
-	remove bitCalc maximize option
-	add date and hour to log out
 	save log button (with config)
 
 """
@@ -31,6 +24,7 @@ from commandBuilder import *
 from scrollablePopup import *
 
 from bitrateCalculator import *
+from datetime import datetime
 
 class Convert2(QMainWindow):
 
@@ -118,7 +112,8 @@ class Convert2(QMainWindow):
 		
 	@pyqtSlot()
 	def print_output(self) -> None:
-		self.output.append(str(self.process.readAll(), 'latin-1'))
+		now = datetime.now().strftime("%d/%m/%Y %H:%M:%S -> ")
+		self.output.append(now + str(self.process.readAll(), 'latin-1'))
 		
 	@pyqtSlot()
 	def select_input_file(self) -> None:
