@@ -13,6 +13,12 @@ TODO:
 	style scrollbar
 	check file exists before start
 	save log button (with config)
+	
+	# audio ahead video -async 1 or samples_per_second
+	# audio behind video -vsync [-1: default. chooses between 1 and 2 ,0:passthrough ,1:duplicated frames ,2: timestamp or dropped] 
+	AUDIO_SYNC = AUDIO_FILTER + ["aresample=async=1"]
+
+	-r: frame rate in hz
 
 """
 
@@ -112,7 +118,7 @@ class Convert2(QMainWindow):
 		
 	@pyqtSlot()
 	def print_output(self) -> None:
-		now = datetime.now().strftime("%d/%m/%Y %H:%M:%S -> ")
+		now = datetime.now().strftime("[%H:%M:%S] ")
 		self.output.append(now + str(self.process.readAll(), 'latin-1'))
 		
 	@pyqtSlot()

@@ -89,9 +89,25 @@ CHEATSHEET = """
 <p>-filter:v "crop=width:height:x:y"</p>
 <p>x, y: starting position and width, height: rectangle size</p>
 
-<h4>x264 Profiles</h4>
-<p>-profile:v [main, high, baseline]</p>
-<p>-level:v [4.0, 4.1, ...]</p>
+<h4>libx264 Profiles</h4>
+<p>-profile:v [main, high, high10, high422, high444, baseline]</p>
+
+<h4>libx264 Levels</h4>
+<p>-level:v desiredLevel</p>
+<p>3 - maximum 720x480@30</p>
+<p>3.1 - maximum HD@30</p>
+<p>4 and 4.1 - maximum FHD@30 or 2048x1024@30</p>
+<p>5 and 5.1 - maximum 2K@30 or 4K@30</p>
+
+<h4>Pixel Format</h4>
+<p>-pix_fmt desiredFormat</p>
+<p>yuv420p - 6 bytes per 4 pixels reordered. Full compatibility</p>
+<p>yuv422 - 8 bytes per 4 pixels</p>
+<p>yuv444 - 12 bytes per 4 pixels</p>
+<p>rgb24</p>
+<p>bgr24</p>
+<p>gray</p>
+<p>pal8</p>
 
 <h4>Remove Streams</h4>
 <p>-[a, s, v]n</p>
@@ -121,4 +137,8 @@ CHEATSHEET = """
 <p>hd360 - 640x360</p>
 <p>qvga - 320x240</p>
 <p>qqvga - 160x120</p>
+
+<h4>Remove Metadata</h4>
+<p>-map_metadata -1</p>
+<p>-map_chapters -1</p>
 """
