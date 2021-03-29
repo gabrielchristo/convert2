@@ -9,6 +9,7 @@ RUNNING = "Process is running"
 NOT_RUNNING = "Process is not running"
 SUBTITLE_ENCODING = "Make sure you have a valid UTF-8 encoded SRT file"
 FILE_CONTAINERS = "Media Files (*.mkv *.mp4 *.3gp *.avi *.wmv *.flv *.ts *.mpg *.mov *.rmvb *.vob *.webm)"
+OUTPUT_FILE_QUESTION = "File already exists. Do you want to overwrite it?"
 
 # ffmpeg executable names
 FFMPEG = "ffmpeg"

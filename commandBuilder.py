@@ -2,6 +2,7 @@
 from typing import Tuple, List, Dict
 from PyQt5.QtCore import pyqtSlot, QObject
 from constants import *
+import platform
 
 class CmdBuilder(QObject):
 	
@@ -20,7 +21,7 @@ class CmdBuilder(QObject):
 		self.arate = COPY
 		
 		self.sinsert = False
-		self.ssize = 25;
+		self.ssize = 25
 		self.scolor = "white"
 		
 	@pyqtSlot(str)
@@ -124,7 +125,10 @@ class CmdBuilder(QObject):
 	
 	def get_subtitle_cmd(self, subtitle: str) -> List[str]:
 		color = (SUBTITLE_WHITE if self.scolor == "white" else SUBTITLE_YELLOW)
-		corrected_path = subtitle.replace('/', '\\\\\\\\').replace(':', '\\\\:') # bug with ffmpeg path chars escaping
+
+		if platform.system() == "Linux": corrected_path = subtitle # no changes to subtitle path at linux os
+		elif platform.system() == "Windows": corrected_path = subtitle.replace('/', '\\\\\\\\').replace(':', '\\\\:') # fix windows bug with ffmpeg path chars escaping
+
 		if self.sinsert is False or self.vcodec == COPY: return []
 		else: return VIDEO_FILTER + [INSERT_SUBTITLE_LABEL.format(corrected_path, self.ssize, color)]
 	

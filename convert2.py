@@ -19,6 +19,14 @@ TODO:
 	AUDIO_SYNC = AUDIO_FILTER + ["aresample=async=1"]
 
 	-r: frame rate in hz
+	constant vs variable frame rate
+
+	frame reference -> xbox max is 4
+	-refs 1 -x264opts b-pyramid=[0,1,2]
+	-x264opt accept parameters as key=value pairs separated by “:”
+	The highest you can go on xbox 360 is 4 Reference frames
+
+	-brand mp42
 
 """
 
@@ -28,9 +36,9 @@ from PyQt5.QtCore import Qt, QDir, QProcess
 from PyQt5.QtGui import QColor, QIcon, QPixmap
 from commandBuilder import *
 from scrollablePopup import *
-
 from bitrateCalculator import *
 from datetime import datetime
+import os
 
 class Convert2(QMainWindow):
 
@@ -87,7 +95,7 @@ class Convert2(QMainWindow):
 	
 	@pyqtSlot()
 	def convert(self) -> None:
-		if self.check_files_are_selected():
+		if self.check_files_are_selected() and self.check_output_file():
 			self.start(self.command.get_convert_cmd(**(self.get_inputs_dict())))
 			
 	def get_inputs_dict(self) -> Dict:
@@ -106,6 +114,22 @@ class Convert2(QMainWindow):
 		elif(self.sCheckbox.isChecked() and self.sFilePath.text() == ""):
 			self.show_message_box("Choose a subtitle file", "No file selected"); return False
 		return True
+
+	def check_output_file(self) -> bool:
+		# check if output file already exists
+		if DEBUG: print("Current output file: ", self.outputFile.text())
+
+		if(os.path.isfile(self.outputFile.text())):
+			ans = self.show_question_box(OUTPUT_FILE_QUESTION, "Output File")
+			if(ans == True):
+				if DEBUG: print("Output file exists. Deleting it")
+				os.remove(self.outputFile.text())
+			elif(ans == False):
+				if DEBUG: print("Output file exists. Not deleting it")
+			return ans
+		else:
+			if DEBUG: print("Output file does not exist")
+			return True # file does not exist, ok to proceed
 		
 	def start(self, cmd: Tuple[str, List]) -> None:
 		# start ffmpeg/ffprobe process with desired arguments
@@ -157,13 +181,18 @@ class Convert2(QMainWindow):
 		self.bitCalculator.show()
 		
 	def show_message_box(self, text: str, title: str) -> None:
-		msgBox = QMessageBox();
+		msgBox = QMessageBox()
 		msgBox.setIcon(QMessageBox.Information)
 		msgBox.setText(text)
 		msgBox.setWindowTitle(title)
 		msgBox.setWindowIcon(QIcon(ICON))
 		msgBox.setStandardButtons(QMessageBox.Ok)
 		msgBox.exec()
+
+	def show_question_box(self, text: str, title: str) -> bool:
+		answer = QMessageBox.question(self, title, text, QMessageBox.Yes | QMessageBox.No)
+		if DEBUG: print("Question box answer: ", answer)
+		return True if answer == QMessageBox.Yes else False
 		
 	@pyqtSlot(int)
 	def show_subtitle_encoding_warning(self, checkboxState: int) -> None:
